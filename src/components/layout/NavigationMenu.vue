@@ -7,7 +7,7 @@
 
     <!-- Typ analýzy -->
     <div class="menu_analysis-type">
-      <h3 class="menu_analysis-header">Analýza histaminové intolerance</h3>
+      <h3 class="menu_analysis-header">Analýza {{ analysisTypeLabel }}</h3>
     </div>
 
     <!-- Mobilní menu -->
@@ -24,38 +24,56 @@
       </li>
     </ul>
 
-    <!-- Tlačítko pro přepínání -->
+    <!-- Tlačítka pro přepínání -->
     <div class="menu-toggle-version">
-      <button @click="toggleVersion">{{ currentVersionLabel }}</button>
+      <button @click="$emit('updateType', { analysisType: 'lactose' })">Laktózová analýza</button>
+      <button @click="$emit('updateType', { analysisType: 'histamine' })">Histaminová analýza</button>
+      <button @click="$emit('updateType', { resultType: 'positive1' })">Pozitivní1</button>
+      <button @click="$emit('updateType', { resultType: 'positive2' })">Pozitivní2</button>
+      <button @click="$emit('updateType', { resultType: 'negative' })">Negativní</button>
     </div>
   </div>
 </template>
+
+
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import logotyp from '@/assets/logo/SVG/GENETIFY_RGB_genetify-logotyp-bila-rgb.svg';
 import menuIcon from '@/assets/icons/menu_icon2.png';
 
+// Props
 const props = defineProps({
   resultType: {
     type: String,
     required: true,
+    validator: (value) => ['positive1', 'positive2', 'negative'].includes(value),
+    default: 'positive1',
   },
   analysisType: {
     type: String,
     required: true,
+    validator: (value) => ['histamine', 'lactose'].includes(value),
   },
 });
 
-const emits = defineEmits(['updateType']);
-
+// Reaktivní hodnoty
 const isOpen = ref(false);
 const hasScrolled = ref(false);
 
+// Přepínač mobilního menu
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
 };
 
+// Dynamický text pro typ analýzy
+const analysisTypeLabel = computed(() => {
+  return props.analysisType === 'histamine'
+    ? 'histaminové intolerance'
+    : 'laktózové intolerance';
+});
+
+// Posluchač scrollování
 const handleScroll = () => {
   hasScrolled.value = window.scrollY > 50;
 };
@@ -79,21 +97,14 @@ const menuItems = [
   { name: 'Dodatečné informace', id: 'information' },
 ];
 
+// Filtrované položky menu na základě výsledku
 const filteredMenuItems = computed(() => {
   return menuItems.filter((item) => {
     return !(props.resultType === 'negative' && item.hideIfNegative);
   });
 });
-
-const toggleVersion = () => {
-  const newResultType = props.resultType === 'positive' ? 'negative' : 'positive';
-  emits('updateType', { resultType: newResultType });
-};
-
-const currentVersionLabel = computed(() => {
-  return props.resultType === 'positive' ? 'Zobrazit negativní verzi' : 'Zobrazit pozitivní verzi';
-});
 </script>
+
 <style scoped>
 .menu-container {
   background-color: black;
@@ -146,7 +157,7 @@ const currentVersionLabel = computed(() => {
   display: none;
 }
 
- /* Vývojové tlačítko pro změnu verze */
+/* Vývojové tlačítko pro změnu verze */
 .menu-toggle-version {
   margin-top: 1rem;
   text-align: center;

@@ -99,10 +99,10 @@ defineProps({
   text-align: center;
   white-space: nowrap;
 }
-.positive {
+.positive1 {
   background-color: #dc4f50;
 }
-.positiveLimited {
+.positive2 {
   background-color: #EEA941;
 }
 .negative {

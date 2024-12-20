@@ -22,17 +22,20 @@
           {{ paragraph }}
         </p>
 
-        <!-- Symptomy -->
-        <div v-if="advice.symptomsList" class="nutritionAdvice-symptoms_container">
-          <h2>{{ advice.symptomsTitle }}</h2>
-          <ul class="nutritionAdvice-symptoms">
-            <li
-              v-for="(symptom, sIndex) in advice.symptomsList"
-              :key="'symptom-' + sIndex"
-            >
-              {{ symptom }}
-            </li>
-          </ul>
+        <!-- Symptomy nebo Positive Reminder -->
+        <div v-if="advice.symptomsList || advice.positiveReminder">
+          <div v-if="advice.symptomsList" class="nutritionAdvice-symptoms_container">
+            <h2>{{ advice.symptomsTitle }}</h2>
+            <ul class="nutritionAdvice-symptoms">
+              <li
+                v-for="(symptom, sIndex) in advice.symptomsList"
+                :key="'symptom-' + sIndex"
+              >
+                {{ symptom }}
+              </li>
+            </ul>
+          </div>
+          <p class="nutritionAdvice-symptoms_container" v-else>{{ advice.positiveReminder }}</p>
         </div>
 
         <!-- Výsledek: pozitivní/negativní -->
@@ -56,11 +59,12 @@
         </ol>
 
         <!-- Podpis -->
-        <p class="nutritionAdvice-signature">{{ advice.signature }}</p>
+        <p class="nutritionAdvice-signature">Mgr. Alžběta Kačírková</p>
       </div>
     </div>
   </section>
 </template>
+
 
 <script setup>
 import { ref } from 'vue'
@@ -125,7 +129,7 @@ const isInView = useInView(imageRef)
 .nutritionAdvice-symptoms_container {
   color: white;
   font-family: 'Gordita-Regular', sans-serif;
-  padding: 10px 40px 30px 40px;
+  padding: 20px 40px 30px 40px;
   background-color: #e56a54;
   margin-left: -32px;
   margin-right: 50px;

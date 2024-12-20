@@ -9,11 +9,10 @@
 
     <!-- Slot pro konkrétní obsah stránky -->
     <div class="content-container">
-      <LactoseHeader v-if="analysisType === 'lactose'" />
-      <HistamineHeader v-else-if="analysisType === 'histamine'" />
-      <slot></slot>
-      <FooterSection />
-    </div>
+    <HeaderBar :analysisType="analysisType" />
+    <slot></slot>
+    <FooterSection />
+  </div>
   </div>
 </template>
 
@@ -21,8 +20,7 @@
 import { defineProps, defineEmits } from 'vue';
 import NavigationMenu from './NavigationMenu.vue';
 import FooterSection from './FooterSection.vue';
-import LactoseHeader from '../sections/HeaderBarLactose.vue';
-import HistamineHeader from '../sections/HeaderBarHistamin.vue';
+import HeaderBar from './HeaderBar.vue';
 
 defineProps({
   analysisType: {

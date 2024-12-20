@@ -1,10 +1,33 @@
 <template>
   <div class="header-container">
-    <h1 class="header-title">Analýza <span class="adelle-font"> histaminové intolerance</span></h1>
+    <h1 class="header-title">
+      Analýza 
+      <span class="adelle-font">
+        {{ analysisTypeText }}
+      </span>
+    </h1>
   </div>
 </template>
 
-<script></script>
+<script setup>
+import { computed } from 'vue';
+
+// Destrukturalizace analysisType z props
+const { analysisType } = defineProps({
+  analysisType: {
+    type: String,
+    required: true,
+    validator: (value) => ['lactose', 'histamine'].includes(value),
+  },
+});
+
+// Vytvoř computed vlastnost
+const analysisTypeText = computed(() => {
+  return analysisType === 'lactose' 
+    ? 'laktózové intolerance' 
+    : 'histaminové intolerance';
+});
+</script>
 <style>
 .header-container {
   background-color: white;
